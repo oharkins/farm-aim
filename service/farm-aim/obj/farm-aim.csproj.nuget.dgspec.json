@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/odis.harkins/Projects/farm-aim/service/farm-aim/farm-aim.csproj": {}
+  },
+  "projects": {
+    "/Users/odis.harkins/Projects/farm-aim/service/farm-aim/farm-aim.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/odis.harkins/Projects/farm-aim/service/farm-aim/farm-aim.csproj",
+        "projectName": "farm-aim",
+        "projectPath": "/Users/odis.harkins/Projects/farm-aim/service/farm-aim/farm-aim.csproj",
+        "packagesPath": "/Users/odis.harkins/.nuget/packages/",
+        "outputPath": "/Users/odis.harkins/Projects/farm-aim/service/farm-aim/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/odis.harkins/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/library-packs": {},
+          "https://tylertech.jfrog.io/artifactory/api/nuget/v3/nuget": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.4.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

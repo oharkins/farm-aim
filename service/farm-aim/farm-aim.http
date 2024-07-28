@@ -1,0 +1,6 @@
+@farm_aim_HostAddress = http://localhost:5208
+
+GET {{farm_aim_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

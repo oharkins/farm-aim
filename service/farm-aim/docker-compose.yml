@@ -1,0 +1,6 @@
+﻿services:
+  farm-aim:
+    image: farm-aim
+    build:
+      context: .
+      dockerfile: Dockerfile

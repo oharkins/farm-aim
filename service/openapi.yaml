@@ -1,0 +1,449 @@
+openapi: 3.0.0
+info:
+  title: Farm and Ranch Asset and Inventory Management API
+  version: 1.1.0
+  description: API for managing assets, inventory, and locations for farms ranches, and homes.
+
+servers:
+  - url: https://api.farmranchmanagement.com/v1
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    Organization:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+    
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+        email:
+          type: string
+        name:
+          type: string
+        organizations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Organization'
+    
+    Location:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        type:
+          type: string
+        parentLocation:
+          type: array
+          items:
+            type: string
+        childLocation:
+          type: array
+          items:
+            type: string
+    
+    Asset:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        locationId:
+          type: string
+        assignedUserId:
+          type: string
+    
+    InventoryItem:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        quantity:
+          type: number
+        unit:
+          type: string
+        locationId:
+          type: string
+
+paths:
+  /auth/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+
+  /organizations:
+    get:
+      summary: List user's organizations
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of organizations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Organization'
+    
+    post:
+      summary: Create a new organization
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Created organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Organization'
+
+  /organizations/{organizationId}/locations:
+    get:
+      summary: List locations for an organization
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of locations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Location'
+    
+    post:
+      summary: Create a new location
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Location'
+      responses:
+        '201':
+          description: Created location
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+  /organizations/{organizationId}/locations/{locationId}/addParent:
+    post:
+      summary: Add a parent location to a location
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                parentLocationId:
+                  type: string
+      responses:
+        '200':
+          description: Parent location added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+  /organizations/{organizationId}/locations/{locationId}/addChild:
+    post:
+      summary: Add a child location to a location
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                childLocationId:
+                  type: string
+      responses:
+        '200':
+          description: Child location added successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+  /organizations/{organizationId}/assets:
+    get:
+      summary: List assets for an organization
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of assets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Asset'
+    
+    post:
+      summary: Create a new asset
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Asset'
+      responses:
+        '201':
+          description: Created asset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+
+  /organizations/{organizationId}/inventory:
+    get:
+      summary: List inventory items for an organization
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of inventory items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InventoryItem'
+    
+    post:
+      summary: Create a new inventory item
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InventoryItem'
+      responses:
+        '201':
+          description: Created inventory item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+
+  /organizations/{organizationId}/inventory/{inventoryId}/move:
+    post:
+      summary: Move inventory item to a new location
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: inventoryId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newLocationId:
+                  type: string
+      responses:
+        '200':
+          description: Inventory item moved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InventoryItem'
+
+  /organizations/{organizationId}/locations/{locationId}/move:
+    post:
+      summary: Move an entire location and its contents to a new parent location
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: locationId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                newParentLocationId:
+                  type: string
+      responses:
+        '200':
+          description: Location and its contents moved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+
+  /organizations/{organizationId}/assets/{assetId}/assign:
+    post:
+      summary: Assign an asset to a user
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: organizationId
+          required: true
+          schema:
+            type: string
+        - in: path
+          name: assetId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userId:
+                  type: string
+      responses:
+        '200':
+          description: Asset assigned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Asset'
+
+security:
+  - bearerAuth: []
