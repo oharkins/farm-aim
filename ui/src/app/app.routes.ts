@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { DefaultLayoutComponent } from './layout';
+import { AuthGuard } from '@auth0/auth0-angular';
 
 export const routes: Routes = [
   {
@@ -16,6 +17,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'dashboard',
+        canActivate: [AuthGuard],
         loadChildren: () => import('./views/dashboard/routes').then((m) => m.routes)
       },
       {
@@ -65,6 +67,7 @@ export const routes: Routes = [
   },
   {
     path: '500',
+    canActivate: [AuthGuard],
     loadComponent: () => import('./views/pages/page500/page500.component').then(m => m.Page500Component),
     data: {
       title: 'Page 500'

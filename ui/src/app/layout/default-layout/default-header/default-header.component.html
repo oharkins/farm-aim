@@ -56,16 +56,16 @@
 </ng-container>
 <!--</c-header>-->
 
-<ng-template #userDropdown>
-  <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item">
+<ng-template #userDropdown >
+  <c-dropdown [popperOptions]="{ placement: 'bottom-start' }" variant="nav-item" *ngIf="auth.user$ | async as user">
     <button [caret]="false" cDropdownToggle class="py-0 pe-0" aria-label="Open user menu">
       <c-avatar
         shape="rounded-1"
         [size]="'md'"
-        src="./assets/images/avatars/8.jpg"
+        [src]="user.picture"
         status="success"
         textColor="primary"
-        alt="User avatar"
+        alt="{{ user.name }}"
       />
     </button>
     <ul cDropdownMenu class="pt-0 w-auto">
@@ -144,13 +144,7 @@
         <hr cDropdownDivider />
       </li>
       <li>
-        <a cDropdownItem routerLink="">
-          <svg cIcon class="me-2" name="cilLockLocked"></svg>
-          Lock Account
-        </a>
-      </li>
-      <li>
-        <a cDropdownItem routerLink="">
+        <a cDropdownItem (click)="auth.logout({ logoutParams: { returnTo: document.location.origin } })">
           <svg cIcon class="me-2" name="cilAccountLogout"></svg>
           Logout
         </a>
